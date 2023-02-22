@@ -69,13 +69,43 @@ def login():
             else:
                 flash("Login failed. Please try again!", "danger")
         else:
-            flash("Sorry user not found", "danger")
+            flash("User not found", "danger")
     return render_template("login.html")
 
 
-@app.route("/add_blog")
+@app.route("/add_blog", methods=['GET', 'POST'])
 def add_blog():
-    return render_template("add_blog.html")
+    if request.method == "POST":
+        location = request.form['location']
+        date = request.form['date']
+        blog = request.form['blog']
+        blog_id = random.randint(1111, 9999)
+
+        mongo.db.blogs.insert_one({
+            'blog': blog,
+            'location': location,
+            'blog_id': blog_id,
+            'created_at': datetime.datetime.now(),
+            'creater': {
+                'name': session['fullName'],
+                'email': session['email']
+            }
+        })
+
+        flash("Blog added successfully", "success")
+    return render_template("single_blog.html")
+
+
+@app.route('/blogs')
+def blogs():
+    blogs = mongo.db.blogs.find()
+    return render_template("view_blog.html", blogs=blogs)
+
+
+@app.route("/view_blog/<int:blog_id>")
+def view_blog(blog_id):
+    blog = mongo.db.blogs.find_one({'blog_id': blog_id})
+    return render_template("view_blog.html", blog=blog)
 
 
 if __name__ == "__main__":
