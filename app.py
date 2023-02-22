@@ -7,18 +7,15 @@ from uuid import uuid4
 from flask import request
 import requests
 
-
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/traveloggers"
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
-
 @app.route("/")
 def helo():
     return render_template("index.html")
-
 
 @app.route("/index")
 def index():
@@ -35,9 +32,10 @@ def login():
 @app.route("/add_blog")
 def add_blog():
     return render_template("add_blog.html")
-
-
-
+    
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 if __name__ == "__main__":
     app.secret_key = "asdtc"
