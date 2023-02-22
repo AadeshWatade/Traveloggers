@@ -32,10 +32,14 @@ def login():
 @app.route("/add_blog")
 def add_blog():
     return render_template("add_blog.html")
-    
+
 @app.route("/profile")
 def profile():
     return render_template("profile.html")
+
+@app.route("/single_blog")
+def single_blog():
+    return render_template("single_blog.html")
 
 if __name__ == "__main__":
     app.secret_key = "asdtc"
